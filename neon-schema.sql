@@ -15,8 +15,11 @@ CREATE TABLE IF NOT EXISTS reservations (
   notes TEXT,
   source TEXT NOT NULL,
   table_id TEXT REFERENCES restaurant_tables(id),
+  staff_name TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE reservations ADD COLUMN IF NOT EXISTS staff_name TEXT;
 
 INSERT INTO restaurant_tables (id, name, capacity)
 VALUES

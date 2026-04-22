@@ -16,6 +16,7 @@ export async function GET() {
       r.notes,
       r.source,
       r.table_id,
+      r.staff_name,
       t.name as table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
@@ -36,14 +37,15 @@ export async function POST(request) {
   const tableId = body.tableId ? String(body.tableId) : null;
   const status = String(body.status || 'booked');
   const source = String(body.source || 'web');
+  const staffName = body.staffName ? String(body.staffName).trim() : null;
 
   if (!guestName || !startTime || !endTime) {
     return Response.json({ error: 'guestName, startTime und endTime sind erforderlich.' }, { status: 400 });
   }
 
   await sql`
-    INSERT INTO reservations (id, guest_name, guest_phone, guest_count, start_time, end_time, status, notes, source, table_id)
-    VALUES (${id}, ${guestName}, ${guestPhone}, ${guestCount}, ${startTime}, ${endTime}, ${status}, ${notes}, ${source}, ${tableId})
+    INSERT INTO reservations (id, guest_name, guest_phone, guest_count, start_time, end_time, status, notes, source, table_id, staff_name)
+    VALUES (${id}, ${guestName}, ${guestPhone}, ${guestCount}, ${startTime}, ${endTime}, ${status}, ${notes}, ${source}, ${tableId}, ${staffName})
   `;
 
   const rows = await sql`
@@ -58,6 +60,7 @@ export async function POST(request) {
       r.notes,
       r.source,
       r.table_id,
+      r.staff_name,
       t.name as table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id

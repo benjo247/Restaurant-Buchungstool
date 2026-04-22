@@ -216,3 +216,139 @@ button, input, textarea, select { font: inherit; }
   .reservation-list-head, .reservation-row { grid-template-columns: 1fr; }
   .floor-canvas { min-height: 620px; }
 }
+
+
+.table-node-active {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 36px rgba(15,23,42,0.14);
+}
+.table-guest {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.muted-soft { opacity: .72; }
+
+.reservation-row { cursor: pointer; }
+.reservation-row-active { background: linear-gradient(90deg, rgba(124,58,237,0.08), rgba(6,182,212,0.04)); }
+
+.row-action {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 999px;
+  padding: 0 12px;
+}
+
+.dock-context {
+  display: grid;
+  gap: 4px;
+  min-width: 230px;
+  color: white;
+}
+.dock-context span {
+  color: rgba(255,255,255,0.72);
+  font-size: 13px;
+}
+.dock-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dock-action:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.detail-card strong {
+  font-size: 16px;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(2, 6, 23, 0.44);
+  display: flex;
+  justify-content: flex-end;
+}
+.drawer {
+  width: min(520px, 100%);
+  height: 100%;
+  background: white;
+  padding: 22px;
+  box-shadow: -24px 0 60px rgba(2, 8, 23, 0.18);
+  overflow: auto;
+}
+.drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.drawer-head h3 {
+  margin: 6px 0 0;
+  font-size: 28px;
+}
+.icon-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: white;
+}
+.drawer-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.field {
+  display: grid;
+  gap: 8px;
+}
+.field span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.field input,
+.field select,
+.field textarea {
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: white;
+}
+.field-full { grid-column: 1 / -1; }
+.drawer-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.header-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+.logo-preview {
+  overflow: hidden;
+}
+.logo-preview-image {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .drawer-form {
+    grid-template-columns: 1fr;
+  }
+}

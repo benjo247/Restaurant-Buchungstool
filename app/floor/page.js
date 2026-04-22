@@ -16,6 +16,7 @@ async function getReservations() {
       r.notes,
       r.source,
       r.table_id,
+      r.staff_name,
       t.name as table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id

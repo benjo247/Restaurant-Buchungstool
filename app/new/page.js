@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+const STAFF_OPTIONS = ['Host', 'Service 1', 'Service 2', 'Manager'];
+
 function addMinutes(value, minutes) {
   const date = new Date(value);
   return new Date(date.getTime() + minutes * 60000).toISOString().slice(0, 16);
@@ -26,7 +28,8 @@ export default function NewPage() {
     tableId: '',
     startTime: initialStart,
     endTime: addMinutes(initialStart, 120),
-    notes: ''
+    notes: '',
+    staffName: ''
   });
   const [message, setMessage] = useState('');
 
@@ -53,7 +56,7 @@ export default function NewPage() {
       return;
     }
 
-    setMessage('Reservierung gespeichert.');
+    setMessage('Reservierung gespeichert. Gehe jetzt zurück zum Floor.');
   }
 
   return (
@@ -65,6 +68,12 @@ export default function NewPage() {
           <input placeholder="Gastname" value={form.guestName} onChange={(e) => setForm({ ...form, guestName: e.target.value })} />
           <input placeholder="Telefon" value={form.guestPhone} onChange={(e) => setForm({ ...form, guestPhone: e.target.value })} />
           <input type="number" placeholder="Personen" value={form.guestCount} onChange={(e) => setForm({ ...form, guestCount: Number(e.target.value) })} />
+          <select value={form.staffName} onChange={(e) => setForm({ ...form, staffName: e.target.value })}>
+            <option value="">Mitarbeiter wählen</option>
+            {STAFF_OPTIONS.map((name) => (
+              <option value={name} key={name}>{name}</option>
+            ))}
+          </select>
           <select value={form.tableId} onChange={(e) => setForm({ ...form, tableId: e.target.value })}>
             <option value="">Tisch optional wählen</option>
             {tables.map((table) => (

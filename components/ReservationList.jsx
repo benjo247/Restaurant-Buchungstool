@@ -1,4 +1,11 @@
-export default function ReservationList({ reservations = [], selectedReservationId = '', onSelectReservation, onEditReservation }) {
+export default function ReservationList({
+  reservations = [],
+  selectedReservationId = '',
+  onSelectReservation,
+  onEditReservation
+}) {
+  const canEdit = typeof onEditReservation === 'function';
+
   return (
     <div className="reservation-list panel-light">
       <div className="reservation-list-head">
@@ -7,13 +14,13 @@ export default function ReservationList({ reservations = [], selectedReservation
         <span>Personen</span>
         <span>Tisch</span>
         <span>Status</span>
-        <span>Aktion</span>
+        <span>{canEdit ? 'Aktion' : 'Mitarbeiter'}</span>
       </div>
 
       {reservations.length === 0 ? (
         <div className="reservation-row reservation-empty">Noch keine Reservierungen vorhanden.</div>
       ) : (
-        reservations.slice(0, 12).map((item) => (
+        reservations.map((item) => (
           <div
             className={`reservation-row ${selectedReservationId === item.id ? 'reservation-row-active' : ''}`}
             key={item.id}
@@ -25,15 +32,19 @@ export default function ReservationList({ reservations = [], selectedReservation
             <span>{item.table_name || 'Offen'}</span>
             <span className={`list-status list-status-${item.status}`}>{item.status}</span>
             <span>
-              <button
-                className="row-action"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEditReservation?.(item.id);
-                }}
-              >
-                Bearbeiten
-              </button>
+              {canEdit ? (
+                <button
+                  className="row-action"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditReservation(item.id);
+                  }}
+                >
+                  Bearbeiten
+                </button>
+              ) : (
+                item.staff_name || '—'
+              )}
             </span>
           </div>
         ))

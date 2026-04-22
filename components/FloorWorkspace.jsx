@@ -11,7 +11,7 @@ import ReservationEditorDrawer from './ReservationEditorDrawer';
 
 export default function FloorWorkspace({ initialReservations, tables }) {
   const [reservations, setReservations] = useState(initialReservations || []);
-  const [selectedReservationId, setSelectedReservationId] = useState(initialReservations?.[0]?.id || '');
+  const [selectedReservationId, setSelectedReservationId] = useState(initialReservations && initialReservations.length ? initialReservations[0].id : '');
   const [selectedTableId, setSelectedTableId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -102,12 +102,12 @@ export default function FloorWorkspace({ initialReservations, tables }) {
         open={isDrawerOpen}
         reservation={selectedReservation}
         tables={tables}
-        onClose={() => setIsDrawerOpen(False)}
+        onClose={() => setIsDrawerOpen(false)}
         onSaved={async (payload) => {
           if (!selectedReservation) return;
           await updateReservation(selectedReservation.id, payload);
           await refreshReservations();
-          setIsDrawerOpen(False);
+          setIsDrawerOpen(false);
         }}
       />
     </section>

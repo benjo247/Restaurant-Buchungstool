@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+const STAFF_OPTIONS = ['Host', 'Service 1', 'Service 2', 'Manager'];
+
 function toLocalInput(value) {
   if (!value) return '';
   const date = new Date(value);
@@ -19,7 +21,8 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
     endTime: '',
     notes: '',
     tableId: '',
-    status: 'booked'
+    status: 'booked',
+    staffName: ''
   });
 
   useEffect(() => {
@@ -32,7 +35,8 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
       endTime: toLocalInput(reservation.end_time),
       notes: reservation.notes || '',
       tableId: reservation.table_id || '',
-      status: reservation.status || 'booked'
+      status: reservation.status || 'booked',
+      staffName: reservation.staff_name || ''
     });
   }, [reservation]);
 
@@ -85,7 +89,17 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
             <input type="datetime-local" value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />
           </label>
 
-          <label className="field field-full">
+          <label className="field">
+            <span>Mitarbeiter</span>
+            <select value={form.staffName} onChange={(e) => setForm({ ...form, staffName: e.target.value })}>
+              <option value="">Nicht zugewiesen</option>
+              {STAFF_OPTIONS.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="field">
             <span>Tisch</span>
             <select value={form.tableId} onChange={(e) => setForm({ ...form, tableId: e.target.value })}>
               <option value="">Kein Tisch</option>
