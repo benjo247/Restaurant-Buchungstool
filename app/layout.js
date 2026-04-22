@@ -20,15 +20,19 @@ export default function RootLayout({ children }) {
       <body>
         <div className="background-orb background-orb-a" />
         <div className="background-orb background-orb-b" />
+        <div className="background-grid" />
 
         <div className="app-shell">
           <header className="app-header panel">
-            <div>
-              <p className="eyebrow">Single Restaurant Suite</p>
-              <h1>Reservierungsdashboard</h1>
-              <p className="header-subtitle">
-                Behalte Ankünfte, Tische und Gästedaten auf iPad und Desktop im Blick.
-              </p>
+            <div className="brand-block">
+              <div className="brand-mark">R</div>
+              <div>
+                <p className="eyebrow">Single Restaurant Suite</p>
+                <h1>Reservierungsdashboard</h1>
+                <p className="header-subtitle">
+                  Behalte Ankünfte, Tische und Gästedaten auf iPad und Desktop im Blick.
+                </p>
+              </div>
             </div>
 
             <div className="header-side">
