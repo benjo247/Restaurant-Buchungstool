@@ -27,8 +27,8 @@ export async function GET() {
 
 export async function POST(request) {
   const body = await request.json();
-  const id = createId();
 
+  const id = createId();
   const guestName = String(body.guestName || '').trim();
   const guestPhone = body.guestPhone ? String(body.guestPhone).trim() : null;
   const guestCount = Number(body.guestCount || 2);
@@ -36,11 +36,14 @@ export async function POST(request) {
   const endTime = String(body.endTime || '');
   const notes = body.notes ? String(body.notes).trim() : null;
   const tableId = body.tableId ? String(body.tableId) : null;
-  const status = 'booked';
-  const source = 'web';
+  const status = String(body.status || 'booked');
+  const source = String(body.source || 'web');
 
   if (!guestName || !startTime || !endTime) {
-    return Response.json({ error: 'guestName, startTime und endTime sind erforderlich.' }, { status: 400 });
+    return Response.json(
+      { error: 'guestName, startTime und endTime sind erforderlich.' },
+      { status: 400 }
+    );
   }
 
   await sql`

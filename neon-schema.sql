@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS reservations (
 
 INSERT INTO restaurant_tables (id, name, capacity)
 VALUES
-  ('t1', 'Tisch 1', 2),
-  ('t2', 'Tisch 2', 4),
-  ('t3', 'Tisch 3', 6)
+  ('t1', 'Fenster 1', 2),
+  ('t2', 'Mitte 2', 4),
+  ('t3', 'Terrasse 3', 4),
+  ('t4', 'Chef Table', 6)
 ON CONFLICT (id) DO NOTHING;

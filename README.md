@@ -1,14 +1,15 @@
-# Restaurant Buchungstool
+# Restaurant Buchungstool – UI Refresh
 
-Browser-only Starter für Vercel + Neon.
+Dieses Paket ist die schickere Oberfläche für dein bereits funktionierendes Setup.
 
-## Wichtig
-- Kein TypeScript
-- Kein Prisma
-- Keine Alias-Imports
+## Vor dem Upload
+- bestehende Dateien im Repo ersetzen
+- `DATABASE_URL` in Vercel unverändert lassen
+- Neon-Schema aus `neon-schema.sql` muss bereits ausgeführt sein
 
-## Neon
-Führe den Inhalt von `neon-schema.sql` im SQL Editor aus.
-
-## Vercel
-Setze `DATABASE_URL` als Environment Variable.
+## Stack
+- Next.js App Router
+- JavaScript
+- Neon Serverless
+- kein TypeScript
+- keine Alias-Imports

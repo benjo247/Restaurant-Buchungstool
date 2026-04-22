@@ -1,21 +1,54 @@
 import StatusBadge from './StatusBadge';
 
+function formatTime(value) {
+  return new Date(value).toLocaleTimeString('de-DE', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
 export default function ReservationCard({ reservation }) {
-  const start = new Date(reservation.start_time);
-  const time = start.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  const start = formatTime(reservation.start_time);
+  const end = formatTime(reservation.end_time);
 
   return (
     <article className="reservation-card">
-      <div className="reservation-top">
-        <div>
-          <p className="reservation-time">{time}</p>
-          <h3>{reservation.guest_name}</h3>
-        </div>
-        <StatusBadge status={reservation.status} />
+      <div className="reservation-time-block">
+        <div className="reservation-time-large">{start}</div>
+        <div className="reservation-time-small">bis {end}</div>
       </div>
-      <p>{reservation.guest_count} Personen · {reservation.table_name || 'Noch kein Tisch'}</p>
-      {reservation.guest_phone ? <p>{reservation.guest_phone}</p> : null}
-      {reservation.notes ? <p>{reservation.notes}</p> : null}
+
+      <div className="reservation-main">
+        <div className="reservation-top">
+          <div>
+            <p className="reservation-kicker">Reservierung</p>
+            <h3>{reservation.guest_name}</h3>
+          </div>
+          <StatusBadge status={reservation.status} />
+        </div>
+
+        <div className="reservation-meta-grid">
+          <div className="meta-pill">
+            <span className="meta-label">Gäste</span>
+            <strong>{reservation.guest_count}</strong>
+          </div>
+          <div className="meta-pill">
+            <span className="meta-label">Tisch</span>
+            <strong>{reservation.table_name || 'Offen'}</strong>
+          </div>
+          <div className="meta-pill meta-pill-wide">
+            <span className="meta-label">Telefon</span>
+            <strong>{reservation.guest_phone || 'Nicht hinterlegt'}</strong>
+          </div>
+        </div>
+
+        {reservation.notes ? (
+          <div className="reservation-note">
+            <span className="meta-label">Notiz</span>
+            <p>{reservation.notes}</p>
+          </div>
+        ) : null}
+      </div>
     </article>
   );
 }

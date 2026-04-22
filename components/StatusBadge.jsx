@@ -1,10 +1,11 @@
-export default function StatusBadge({ status }) {
-  const map = {
-    booked: 'status-booked',
-    seated: 'status-seated',
-    finished: 'status-finished',
-    no_show: 'status-no-show'
-  };
+const statusConfig = {
+  booked: { label: 'Gebucht', className: 'status-booked' },
+  seated: { label: 'Eingetroffen', className: 'status-seated' },
+  finished: { label: 'Erledigt', className: 'status-finished' },
+  no_show: { label: 'No-Show', className: 'status-no-show' }
+};
 
-  return <span className={`status-badge ${map[status] || 'status-booked'}`}>{status}</span>;
+export default function StatusBadge({ status }) {
+  const item = statusConfig[status] || statusConfig.booked;
+  return <span className={`status-badge ${item.className}`}>{item.label}</span>;
 }
