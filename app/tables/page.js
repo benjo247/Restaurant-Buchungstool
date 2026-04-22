@@ -20,24 +20,24 @@ export default async function TablesPage() {
   const tables = await getTables();
 
   return (
-    <section className="stack-lg">
-      <div className="section-head">
+    <section className="content-stack">
+      <div className="page-hero panel-light">
         <div>
-          <p className="eyebrow">Tische</p>
-          <h2>Tischübersicht</h2>
-          <p className="section-copy">Kapazitäten und zugewiesene Reservierungen auf einen Blick.</p>
+          <p className="section-kicker">Kapazität</p>
+          <h3>Tischübersicht</h3>
+          <p>Eine kompakte Raum- und Kapazitätsbasis für den nächsten grafischen Tischplan.</p>
         </div>
       </div>
 
       <div className="table-grid">
         {tables.map((table) => (
-          <article key={table.id} className="panel table-card">
-            <div className="table-card-top">
-              <span className="table-badge">{table.capacity} Plätze</span>
-              <span className="table-counter">{Number(table.reservation_count)} Buchungen</span>
+          <article key={table.id} className="table-tile panel-light">
+            <div className="table-tile-top">
+              <span className="table-pill">{table.capacity} Plätze</span>
+              <span className="table-pill subtle">{Number(table.reservation_count)} Buchungen</span>
             </div>
             <h3>{table.name}</h3>
-            <p className="muted">Interne ID: {table.id}</p>
+            <p>ID: {table.id}</p>
           </article>
         ))}
       </div>

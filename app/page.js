@@ -1,5 +1,6 @@
 import { sql } from '../lib/db';
 import ReservationCard from '../components/ReservationCard';
+import QuickFilters from '../components/QuickFilters';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,87 +23,65 @@ async function getReservations() {
   `;
 }
 
-function formatDate(value) {
-  return new Intl.DateTimeFormat('de-DE', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'short'
-  }).format(new Date(value));
-}
-
 export default async function HomePage() {
   const reservations = await getReservations();
   const totalGuests = reservations.reduce((sum, item) => sum + Number(item.guest_count || 0), 0);
   const openTables = reservations.filter((item) => !item.table_name).length;
-  const nextReservation = reservations[0];
+  const seated = reservations.filter((item) => item.status === 'seated').length;
 
   return (
-    <section className="stack-lg">
-      <section className="hero-grid">
-        <div className="hero-card panel">
-          <div className="hero-content">
-            <div>
-              <p className="eyebrow">Heute im Überblick</p>
-              <h2>Serviceübersicht</h2>
-              <p className="hero-copy">
-                Alle heutigen Buchungen, Tische und Kontaktinfos in einer klaren Oberfläche.
-              </p>
-            </div>
-
-            <div className="hero-actions">
-              <a className="primary-button" href="/new">+ Neue Reservierung</a>
-              <a className="ghost-button" href="/reservations">Alle Buchungen</a>
-            </div>
-          </div>
+    <section className="content-stack">
+      <section className="stats-row">
+        <div className="stat-panel panel-light accent-violet">
+          <span className="stat-label">Reservierungen</span>
+          <strong>{reservations.length}</strong>
+          <p>heute eingeplant</p>
         </div>
-
-        <div className="stats-grid">
-          <div className="metric-card panel">
-            <span className="metric-label">Reservierungen</span>
-            <strong>{reservations.length}</strong>
-            <p>heute geladen</p>
-          </div>
-          <div className="metric-card panel">
-            <span className="metric-label">Gäste gesamt</span>
-            <strong>{totalGuests}</strong>
-            <p>erwartete Personen</p>
-          </div>
-          <div className="metric-card panel">
-            <span className="metric-label">Offene Tische</span>
-            <strong>{openTables}</strong>
-            <p>noch nicht zugewiesen</p>
-          </div>
-          <div className="metric-card panel accent-card">
-            <span className="metric-label">Nächste Ankunft</span>
-            <strong>{nextReservation ? new Date(nextReservation.start_time).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : '—'}</strong>
-            <p>{nextReservation ? formatDate(nextReservation.start_time) : 'noch keine Reservierung'}</p>
-          </div>
+        <div className="stat-panel panel-light accent-cyan">
+          <span className="stat-label">Gäste</span>
+          <strong>{totalGuests}</strong>
+          <p>erwartete Personen</p>
+        </div>
+        <div className="stat-panel panel-light accent-amber">
+          <span className="stat-label">Offene Tische</span>
+          <strong>{openTables}</strong>
+          <p>noch nicht zugewiesen</p>
+        </div>
+        <div className="stat-panel panel-light accent-green">
+          <span className="stat-label">Eingetroffen</span>
+          <strong>{seated}</strong>
+          <p>bereits im Haus</p>
         </div>
       </section>
 
-      <section className="section-head">
-        <div>
-          <p className="eyebrow">Ankünfte</p>
-          <h2>Heutige Reservierungen</h2>
-        </div>
-        <a className="ghost-button" href="/tables">Tische ansehen</a>
-      </section>
+      <QuickFilters />
 
-      {reservations.length === 0 ? (
-        <div className="panel empty-state empty-state-large">
-          <h3>Noch keine Reservierungen</h3>
-          <p>
-            Lege jetzt die erste Buchung an oder importiere Daten über deine Webseite.
-          </p>
-          <a className="primary-button" href="/new">Jetzt erste Reservierung anlegen</a>
+      <section className="list-shell panel-light">
+        <div className="list-header">
+          <div>
+            <p className="section-kicker">Tagesliste</p>
+            <h3>Reservierungen</h3>
+          </div>
+          <div className="list-header-meta">
+            <span>Live Übersicht</span>
+            <span>{reservations.length} Einträge</span>
+          </div>
         </div>
-      ) : (
-        <div className="card-list">
-          {reservations.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
-          ))}
-        </div>
-      )}
+
+        {reservations.length === 0 ? (
+          <div className="empty-state table-empty">
+            <h3>Noch keine Reservierungen</h3>
+            <p>Lege die erste Reservierung an, damit die Tagesansicht befüllt wird.</p>
+            <a className="topbar-primary" href="/new">Jetzt anlegen</a>
+          </div>
+        ) : (
+          <div className="reservation-table-list">
+            {reservations.map((reservation) => (
+              <ReservationCard key={reservation.id} reservation={reservation} />
+            ))}
+          </div>
+        )}
+      </section>
     </section>
   );
 }

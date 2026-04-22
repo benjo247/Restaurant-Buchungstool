@@ -11,23 +11,23 @@ export default async function NewPage() {
   const tables = await getTables();
 
   return (
-    <section className="stack-lg">
-      <div className="section-head">
+    <section className="content-stack">
+      <div className="page-hero panel-light page-hero-dark">
         <div>
-          <p className="eyebrow">Neu</p>
-          <h2>Neue Reservierung</h2>
-          <p className="section-copy">Eine saubere, touchfreundliche Eingabemaske für dein Team.</p>
+          <p className="section-kicker">Neue Buchung</p>
+          <h3>Reservierung anlegen</h3>
+          <p>Große Eingabefelder, klare Struktur und direkt passend für Tablet und Desktop.</p>
         </div>
       </div>
 
-      <div className="two-column-layout">
-        <div className="panel info-card">
+      <div className="two-column-layout wide-layout">
+        <div className="panel-light info-card side-dark-card">
           <h3>Schneller Workflow</h3>
-          <ul className="feature-list">
-            <li>Gastdaten und Uhrzeit erfassen</li>
-            <li>Tisch optional direkt zuweisen</li>
-            <li>Notizen für Service sichtbar speichern</li>
-            <li>Nach dem Speichern sofort auf der Startseite sehen</li>
+          <ul className="feature-list feature-list-bright">
+            <li>Gastdaten sauber erfassen</li>
+            <li>Tisch direkt zuweisen oder offen lassen</li>
+            <li>Interne Notiz für das Team hinterlegen</li>
+            <li>Direkt zurück in die Tagesliste springen</li>
           </ul>
         </div>
 

@@ -25,26 +25,32 @@ export default async function ReservationsPage() {
   const reservations = await getReservations();
 
   return (
-    <section className="stack-lg">
-      <div className="section-head">
+    <section className="content-stack">
+      <div className="page-hero panel-light">
         <div>
-          <p className="eyebrow">Reservierungen</p>
-          <h2>Alle Buchungen</h2>
-          <p className="section-copy">Vollständige Liste aller gespeicherten Reservierungen.</p>
+          <p className="section-kicker">Historie</p>
+          <h3>Alle Buchungen</h3>
+          <p>Vollständige Liste aller gespeicherten Reservierungen im gleichen Control-Center-Look.</p>
         </div>
       </div>
 
-      {reservations.length === 0 ? (
-        <div className="panel empty-state">
-          <p>Noch keine Einträge vorhanden.</p>
+      <section className="list-shell panel-light">
+        <div className="list-header">
+          <div>
+            <p className="section-kicker">Archiv</p>
+            <h3>Reservierungsübersicht</h3>
+          </div>
+          <div className="list-header-meta">
+            <span>{reservations.length} Einträge</span>
+          </div>
         </div>
-      ) : (
-        <div className="card-list">
+
+        <div className="reservation-table-list">
           {reservations.map((reservation) => (
             <ReservationCard key={reservation.id} reservation={reservation} />
           ))}
         </div>
-      )}
+      </section>
     </section>
   );
 }
