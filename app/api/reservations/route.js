@@ -17,11 +17,12 @@ export async function GET() {
       r.source,
       r.table_id,
       r.staff_name,
-      t.name as table_name
+      t.name AS table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     ORDER BY r.start_time ASC
   `;
+
   return Response.json(rows);
 }
 
@@ -32,17 +33,17 @@ export async function POST(request) {
   const guestName = String(body.guestName || '').trim();
   const guestPhone = body.guestPhone ? String(body.guestPhone).trim() : null;
   const guestCount = Number(body.guestCount || 2);
-  const startTime = String(body.startTime || '');
-  const endTime = String(body.endTime || '');
+  const startTime = String(body.startTime || '').trim();
+  const endTime = String(body.endTime || '').trim();
   const notes = body.notes ? String(body.notes).trim() : null;
   const tableId = body.tableId ? String(body.tableId) : null;
   const status = String(body.status || 'booked');
   const source = String(body.source || 'web');
   const staffName = body.staffName ? String(body.staffName).trim() : null;
 
-  if (!guestName || !startTime || !endTime) {
+  if (!guestName || !guestCount || !startTime || !endTime) {
     return Response.json(
-      { error: 'guestName, startTime und endTime sind erforderlich.' },
+      { error: 'Name, Personen, Start und Ende sind erforderlich.' },
       { status: 400 }
     );
   }
@@ -89,12 +90,12 @@ export async function POST(request) {
       r.source,
       r.table_id,
       r.staff_name,
-      t.name as table_name
+      t.name AS table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     WHERE r.id = ${id}
     LIMIT 1
   `;
 
-  return Response.json(rows[0] || { ok: true, id });
+  return Response.json(rows[0]);
 }
