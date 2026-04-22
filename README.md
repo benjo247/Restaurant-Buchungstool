@@ -1,15 +1,8 @@
-# Restaurant Buchungstool – UI Refresh
+# Restaurant Buchungstool – Floorplan V1
 
-Dieses Paket ist die schickere Oberfläche für dein bereits funktionierendes Setup.
+Neue Struktur mit Sidebar, Topbar, Floor View, Right Rail, Bottom Action Dock, Logo Upload und Logo im Header.
 
-## Vor dem Upload
-- bestehende Dateien im Repo ersetzen
-- `DATABASE_URL` in Vercel unverändert lassen
-- Neon-Schema aus `neon-schema.sql` muss bereits ausgeführt sein
-
-## Stack
-- Next.js App Router
-- JavaScript
-- Neon Serverless
-- kein TypeScript
-- keine Alias-Imports
+- Inhalt dieses Ordners ins Repo hochladen
+- bestehende Dateien ersetzen
+- DATABASE_URL in Vercel unverändert lassen
+- neu deployen

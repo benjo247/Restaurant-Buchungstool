@@ -1,5 +1,4 @@
 import { sql } from '../../lib/db';
-import NewReservationForm from '../../components/NewReservationForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,27 +10,25 @@ export default async function NewPage() {
   const tables = await getTables();
 
   return (
-    <section className="content-stack">
-      <div className="page-hero panel-light page-hero-dark">
-        <div>
-          <p className="section-kicker">Neue Buchung</p>
-          <h3>Reservierung anlegen</h3>
-          <p>Große Eingabefelder, klare Struktur und direkt passend für Tablet und Desktop.</p>
-        </div>
-      </div>
-
-      <div className="two-column-layout wide-layout">
-        <div className="panel-light info-card side-dark-card">
-          <h3>Schneller Workflow</h3>
-          <ul className="feature-list feature-list-bright">
-            <li>Gastdaten sauber erfassen</li>
-            <li>Tisch direkt zuweisen oder offen lassen</li>
-            <li>Interne Notiz für das Team hinterlegen</li>
-            <li>Direkt zurück in die Tagesliste springen</li>
-          </ul>
-        </div>
-
-        <NewReservationForm tables={tables} />
+    <section className="simple-page">
+      <div className="panel-light form-shell">
+        <p className="eyebrow">Neu</p>
+        <h2>Neue Reservierung</h2>
+        <form className="simple-form">
+          <input placeholder="Gastname" />
+          <input placeholder="Telefon" />
+          <input type="number" placeholder="Personen" />
+          <select>
+            <option>Tisch optional wählen</option>
+            {tables.map((table) => (
+              <option key={table.id}>{table.name} · {table.capacity} Plätze</option>
+            ))}
+          </select>
+          <input type="datetime-local" />
+          <input type="datetime-local" />
+          <textarea rows="4" placeholder="Notiz" />
+          <button type="button" className="primary-button">Reservierung speichern</button>
+        </form>
       </div>
     </section>
   );

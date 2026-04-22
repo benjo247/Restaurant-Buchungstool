@@ -5,29 +5,16 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const rows = await sql`
-    SELECT
-      r.id,
-      r.guest_name,
-      r.guest_phone,
-      r.guest_count,
-      r.start_time,
-      r.end_time,
-      r.status,
-      r.notes,
-      r.source,
-      r.table_id,
-      t.name as table_name
+    SELECT r.id, r.guest_name, r.guest_phone, r.guest_count, r.start_time, r.end_time, r.status, r.notes, r.source, r.table_id, t.name as table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     ORDER BY r.start_time ASC
   `;
-
   return Response.json(rows);
 }
 
 export async function POST(request) {
   const body = await request.json();
-
   const id = createId();
   const guestName = String(body.guestName || '').trim();
   const guestPhone = body.guestPhone ? String(body.guestPhone).trim() : null;
@@ -40,37 +27,12 @@ export async function POST(request) {
   const source = String(body.source || 'web');
 
   if (!guestName || !startTime || !endTime) {
-    return Response.json(
-      { error: 'guestName, startTime und endTime sind erforderlich.' },
-      { status: 400 }
-    );
+    return Response.json({ error: 'guestName, startTime und endTime sind erforderlich.' }, { status: 400 });
   }
 
   await sql`
-    INSERT INTO reservations (
-      id,
-      guest_name,
-      guest_phone,
-      guest_count,
-      start_time,
-      end_time,
-      status,
-      notes,
-      source,
-      table_id
-    ) VALUES (
-      ${id},
-      ${guestName},
-      ${guestPhone},
-      ${guestCount},
-      ${startTime},
-      ${endTime},
-      ${status},
-      ${notes},
-      ${source},
-      ${tableId}
-    )
+    INSERT INTO reservations (id, guest_name, guest_phone, guest_count, start_time, end_time, status, notes, source, table_id)
+    VALUES (${id}, ${guestName}, ${guestPhone}, ${guestCount}, ${startTime}, ${endTime}, ${status}, ${notes}, ${source}, ${tableId})
   `;
-
   return Response.json({ ok: true, id });
 }

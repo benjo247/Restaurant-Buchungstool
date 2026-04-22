@@ -1,21 +1,35 @@
 import './globals.css';
-import AppSidebar from '../components/AppSidebar';
-import TopBar from '../components/TopBar';
+import Sidebar from '../components/Sidebar';
+import HeaderBrand from '../components/HeaderBrand';
 
 export const metadata = {
   title: 'Restaurant Buchungstool',
-  description: 'Moderne Desktop- und iPad-Oberfläche für Reservierungen'
+  description: 'Floor Control für Restaurants'
 };
+
+function getDateLabel() {
+  return new Intl.DateTimeFormat('de-DE', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long'
+  }).format(new Date());
+}
 
 export default function RootLayout({ children }) {
   return (
     <html lang="de">
       <body>
-        <div className="control-shell">
-          <AppSidebar />
-          <div className="workspace-shell">
-            <TopBar />
-            <main className="workspace-content">{children}</main>
+        <div className="app-layout">
+          <Sidebar />
+          <div className="main-shell">
+            <header className="shell-header">
+              <HeaderBrand />
+              <div className="header-meta">
+                <div className="date-pill">{getDateLabel()}</div>
+                <div className="date-pill accent">Live Service</div>
+              </div>
+            </header>
+            <main className="page-content">{children}</main>
           </div>
         </div>
       </body>
