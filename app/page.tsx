@@ -1,5 +1,5 @@
-import { getSql } from "@/lib/db";
-import ReservationCard from "@/components/ReservationCard";
+import { sql } from "../lib/db";
+import ReservationCard from "../components/ReservationCard";
 
 export const dynamic = "force-dynamic";
 
