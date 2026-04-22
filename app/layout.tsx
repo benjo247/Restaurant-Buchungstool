@@ -1,5 +1,5 @@
 import "./globals.css";
-import NavTabs from "@/components/NavTabs";
+import NavTabs from "../components/NavTabs";
 
 export const metadata = {
   title: "Restaurant App",
