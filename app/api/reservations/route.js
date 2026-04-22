@@ -5,7 +5,18 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const rows = await sql`
-    SELECT r.id, r.guest_name, r.guest_phone, r.guest_count, r.start_time, r.end_time, r.status, r.notes, r.source, r.table_id, t.name as table_name
+    SELECT
+      r.id,
+      r.guest_name,
+      r.guest_phone,
+      r.guest_count,
+      r.start_time,
+      r.end_time,
+      r.status,
+      r.notes,
+      r.source,
+      r.table_id,
+      t.name as table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     ORDER BY r.start_time ASC
@@ -34,5 +45,25 @@ export async function POST(request) {
     INSERT INTO reservations (id, guest_name, guest_phone, guest_count, start_time, end_time, status, notes, source, table_id)
     VALUES (${id}, ${guestName}, ${guestPhone}, ${guestCount}, ${startTime}, ${endTime}, ${status}, ${notes}, ${source}, ${tableId})
   `;
-  return Response.json({ ok: true, id });
+
+  const rows = await sql`
+    SELECT
+      r.id,
+      r.guest_name,
+      r.guest_phone,
+      r.guest_count,
+      r.start_time,
+      r.end_time,
+      r.status,
+      r.notes,
+      r.source,
+      r.table_id,
+      t.name as table_name
+    FROM reservations r
+    LEFT JOIN restaurant_tables t ON r.table_id = t.id
+    WHERE r.id = ${id}
+    LIMIT 1
+  `;
+
+  return Response.json(rows[0] || { ok: true, id });
 }

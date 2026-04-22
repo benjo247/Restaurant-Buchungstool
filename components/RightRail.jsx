@@ -1,4 +1,4 @@
-export default function RightRail({ reservations = [] }) {
+export default function RightRail({ reservations = [], selectedReservation, selectedTable }) {
   return (
     <aside className="right-rail panel-light">
       <div className="rail-section">
@@ -18,9 +18,25 @@ export default function RightRail({ reservations = [] }) {
       </div>
 
       <div className="rail-section">
-        <p className="eyebrow">Service Hinweise</p>
-        <div className="hint-card">2 Tische ohne Zuweisung</div>
-        <div className="hint-card">1 Rechnung angefordert</div>
+        <p className="eyebrow">Aktueller Kontext</p>
+        <div className="detail-card">
+          {selectedReservation ? (
+            <>
+              <strong>{selectedReservation.guest_name}</strong>
+              <span>{selectedReservation.guest_count} Personen</span>
+              <span>Status: {selectedReservation.status}</span>
+              <span>Tisch: {selectedReservation.table_name || 'offen'}</span>
+            </>
+          ) : selectedTable ? (
+            <>
+              <strong>{selectedTable.name}</strong>
+              <span>{selectedTable.capacity} Plätze</span>
+              <span>Kein aktiver Gast ausgewählt</span>
+            </>
+          ) : (
+            <span className="muted">Tippe auf einen Tisch oder eine Reservierung.</span>
+          )}
+        </div>
       </div>
     </aside>
   );

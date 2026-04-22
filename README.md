@@ -1,9 +1,9 @@
-trigger deploy
-# Restaurant Buchungstool – Floorplan V1
+# Restaurant Buchungstool – Floorplan V2 Functional
 
-Neue Struktur mit Sidebar, Topbar, Floor View, Right Rail, Bottom Action Dock, Logo Upload und Logo im Header.
-
-- Inhalt dieses Ordners ins Repo hochladen
-- bestehende Dateien ersetzen
-- DATABASE_URL in Vercel unverändert lassen
-- neu deployen
+Diese Version bringt Funktionalität:
+- Reservierungen bearbeiten
+- Status per Bottom Dock ändern
+- Tische anwählbar
+- rechte Rail reagiert auf Auswahl
+- neues Reservierungsformular speichert
+- Logo passt besser in den Header
