@@ -4,75 +4,74 @@ import { createId } from "../../../lib/id";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  try {
-    const sql = getSql();
-    const rows = await sql`
-      select
-        r.id,
-        r.guest_name,
-        r.guest_phone,
-        r.guest_count,
-        r.reservation_date::text,
-        r.reservation_time,
-        r.duration_minutes,
-        r.status,
-        r.notes,
-        r.source,
-        r.created_at,
-        r.updated_at,
-        t.name as table_name
-      from reservations r
-      left join restaurant_tables t on t.id = r.table_id
-      order by r.reservation_date asc, r.reservation_time asc
-    `;
-    return Response.json(rows);
-  } catch (e: any) {
-    return Response.json({ error: e?.message ?? "GET fehlgeschlagen" }, { status: 500 });
-  }
+  const rows = await sql`
+    SELECT
+      r.id,
+      r.guest_name,
+      r.guest_phone,
+      r.guest_count,
+      r.start_time,
+      r.end_time,
+      r.status,
+      r.notes,
+      r.source,
+      r.table_id,
+      t.name as table_name
+    FROM reservations r
+    LEFT JOIN restaurant_tables t ON r.table_id = t.id
+    ORDER BY r.start_time ASC
+  `;
+
+  return Response.json(rows);
 }
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
+export async function POST(request: Request) {
+  const body = await request.json();
 
-    if (!body.guestName || !body.guestCount || !body.reservationDate || !body.reservationTime) {
-      return Response.json({ error: "Pflichtfelder fehlen" }, { status: 400 });
-    }
+  const id = createId();
 
-    const sql = getSql();
-    const id = makeId("res");
+  const guestName = String(body.guestName || "").trim();
+  const guestPhone = body.guestPhone ? String(body.guestPhone).trim() : null;
+  const guestCount = Number(body.guestCount || 2);
+  const startTime = String(body.startTime);
+  const endTime = String(body.endTime);
+  const notes = body.notes ? String(body.notes).trim() : null;
+  const tableId = body.tableId ? String(body.tableId) : null;
+  const status = "booked";
+  const source = "web";
 
-    const rows = await sql`
-      insert into reservations (
-        id,
-        guest_name,
-        guest_phone,
-        guest_count,
-        reservation_date,
-        reservation_time,
-        duration_minutes,
-        status,
-        notes,
-        source,
-        updated_at
-      ) values (
-        ${id},
-        ${body.guestName},
-        ${body.guestPhone || null},
-        ${Number(body.guestCount)},
-        ${body.reservationDate},
-        ${body.reservationTime},
-        ${Number(body.durationMinutes || 120)},
-        'booked',
-        ${body.notes || null},
-        'web',
-        now()
-      )
-      returning id, guest_name, guest_count, reservation_date::text, reservation_time, status
-    `;
-
-    return Response.json(rows[0], { status: 201 });
-  } catch (e: any) {
-    return Response.json({ error: e?.message ?? "POST fehlgeschlagen" }, { status: 500 });
+  if (!guestName || !startTime || !endTime) {
+    return Response.json(
+      { error: "guestName, startTime und endTime sind erforderlich." },
+      { status: 400 }
+    );
   }
+
+  await sql`
+    INSERT INTO reservations (
+      id,
+      guest_name,
+      guest_phone,
+      guest_count,
+      start_time,
+      end_time,
+      status,
+      notes,
+      source,
+      table_id
+    ) VALUES (
+      ${id},
+      ${guestName},
+      ${guestPhone},
+      ${guestCount},
+      ${startTime},
+      ${endTime},
+      ${status},
+      ${notes},
+      ${source},
+      ${tableId}
+    )
+  `;
+
+  return Response.json({ ok: true, id });
 }
