@@ -6,21 +6,26 @@ export async function PATCH(request, { params }) {
   const id = params.id;
   const body = await request.json();
 
-  const currentRows = await sql`
+  const existingRows = await sql`
     SELECT *
     FROM reservations
     WHERE id = ${id}
     LIMIT 1
   `;
 
-  const current = currentRows[0];
+  const current = existingRows[0];
 
   if (!current) {
-    return Response.json({ error: 'Reservierung nicht gefunden.' }, { status: 404 });
+    return Response.json(
+      { error: 'Reservierung nicht gefunden.' },
+      { status: 404 }
+    );
   }
 
   const guestName =
-    body.guestName !== undefined ? String(body.guestName || '').trim() : current.guest_name;
+    body.guestName !== undefined
+      ? String(body.guestName || '').trim()
+      : current.guest_name;
 
   const guestPhone =
     body.guestPhone !== undefined
@@ -28,16 +33,24 @@ export async function PATCH(request, { params }) {
       : current.guest_phone;
 
   const guestCount =
-    body.guestCount !== undefined ? Number(body.guestCount || 0) : current.guest_count;
+    body.guestCount !== undefined
+      ? Number(body.guestCount || 0)
+      : current.guest_count;
 
   const startTime =
-    body.startTime !== undefined ? String(body.startTime || '') : current.start_time;
+    body.startTime !== undefined
+      ? String(body.startTime || '').trim()
+      : current.start_time;
 
   const endTime =
-    body.endTime !== undefined ? String(body.endTime || '') : current.end_time;
+    body.endTime !== undefined
+      ? String(body.endTime || '').trim()
+      : current.end_time;
 
   const status =
-    body.status !== undefined ? String(body.status || 'booked') : current.status;
+    body.status !== undefined
+      ? String(body.status || 'booked')
+      : current.status;
 
   const notes =
     body.notes !== undefined
@@ -45,7 +58,9 @@ export async function PATCH(request, { params }) {
       : current.notes;
 
   const tableId =
-    body.tableId !== undefined ? (body.tableId ? String(body.tableId) : null) : current.table_id;
+    body.tableId !== undefined
+      ? (body.tableId ? String(body.tableId) : null)
+      : current.table_id;
 
   const staffName =
     body.staffName !== undefined
@@ -87,7 +102,7 @@ export async function PATCH(request, { params }) {
       r.source,
       r.table_id,
       r.staff_name,
-      t.name as table_name
+      t.name AS table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     WHERE r.id = ${id}
