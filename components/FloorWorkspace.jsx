@@ -11,26 +11,43 @@ import ReservationEditorDrawer from './ReservationEditorDrawer';
 
 export default function FloorWorkspace({ initialReservations, tables }) {
   const [reservations, setReservations] = useState(initialReservations || []);
-  const [selectedReservationId, setSelectedReservationId] = useState(initialReservations && initialReservations.length ? initialReservations[0].id : '');
+  const [selectedReservationId, setSelectedReservationId] = useState(
+    initialReservations && initialReservations.length ? initialReservations[0].id : ''
+  );
   const [selectedTableId, setSelectedTableId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const selectedReservation = useMemo(
-    () => reservations.find((item) => item.id === selectedReservationId) || null,
-    [reservations, selectedReservationId]
-  );
+  const selectedReservation = useMemo(() => {
+    return reservations.find((item) => item.id === selectedReservationId) || null;
+  }, [reservations, selectedReservationId]);
 
-  const selectedTable = useMemo(
-    () => tables.find((item) => item.id === selectedTableId) || null,
-    [tables, selectedTableId]
-  );
+  const selectedTable = useMemo(() => {
+    return tables.find((item) => item.id === selectedTableId) || null;
+  }, [tables, selectedTableId]);
 
   const activeTableId = selectedReservation?.table_id || selectedTableId || '';
 
   async function refreshReservations() {
     const response = await fetch('/api/reservations', { cache: 'no-store' });
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Aktualisierung fehlgeschlagen.');
+    }
+
     setReservations(data);
+
+    if (selectedReservationId) {
+      const updatedSelected = data.find((item) => item.id === selectedReservationId);
+      if (!updatedSelected) {
+        setSelectedReservationId('');
+        setSelectedTableId('');
+      } else {
+        setSelectedTableId(updatedSelected.table_id || '');
+      }
+    }
+
+    return data;
   }
 
   async function updateReservation(id, payload) {
@@ -41,21 +58,30 @@ export default function FloorWorkspace({ initialReservations, tables }) {
     });
 
     const data = await response.json();
+
     if (!response.ok) {
-      throw new Error(data.error || 'Änderung fehlgeschlagen.');
+      throw new Error(data.error || 'Speichern fehlgeschlagen.');
     }
 
-    setReservations((current) => current.map((item) => (item.id === id ? { ...item, ...data } : item)));
+    setReservations((current) =>
+      current.map((item) => (item.id === id ? { ...item, ...data } : item))
+    );
+
+    setSelectedReservationId(id);
+    setSelectedTableId(data.table_id || '');
+
+    return data;
   }
 
   async function handleStatusChange(status) {
     if (!selectedReservation) return;
+
     await updateReservation(selectedReservation.id, { status });
     await refreshReservations();
   }
 
   function handleSelectReservation(id) {
-    const next = reservations.find((item) => item.id === id);
+    const next = reservations.find((item) => item.id === id) || null;
     setSelectedReservationId(id);
     setSelectedTableId(next?.table_id || '');
   }
@@ -63,6 +89,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
   function handleSelectTable(tableId) {
     setSelectedTableId(tableId);
     const linkedReservation = reservations.find((item) => item.table_id === tableId);
+
     if (linkedReservation) {
       setSelectedReservationId(linkedReservation.id);
     } else {
@@ -74,9 +101,16 @@ export default function FloorWorkspace({ initialReservations, tables }) {
     <section className="floor-page">
       <TopBar />
       <MetricTiles reservations={reservations} />
+
       <div className="floor-layout">
         <div className="floor-main">
-          <FloorPlan tables={tables} reservations={reservations} activeTableId={activeTableId} onSelectTable={handleSelectTable} />
+          <FloorPlan
+            tables={tables}
+            reservations={reservations}
+            activeTableId={activeTableId}
+            onSelectTable={handleSelectTable}
+          />
+
           <ReservationList
             reservations={reservations}
             selectedReservationId={selectedReservationId}
@@ -88,13 +122,20 @@ export default function FloorWorkspace({ initialReservations, tables }) {
           />
         </div>
 
-        <RightRail reservations={reservations} selectedReservation={selectedReservation} selectedTable={selectedTable} />
+        <RightRail
+          reservations={reservations}
+          selectedReservation={selectedReservation}
+          selectedTable={selectedTable}
+        />
       </div>
 
       <BottomDock
         selectedReservation={selectedReservation}
         selectedTable={selectedTable}
-        onOpenEdit={() => selectedReservation ? setIsDrawerOpen(true) : null}
+        onOpenEdit={() => {
+          if (!selectedReservation) return;
+          setIsDrawerOpen(true);
+        }}
         onSetStatus={handleStatusChange}
       />
 
@@ -103,9 +144,9 @@ export default function FloorWorkspace({ initialReservations, tables }) {
         reservation={selectedReservation}
         tables={tables}
         onClose={() => setIsDrawerOpen(false)}
-        onSaved={async (payload) => {
+        onSaved={async (form) => {
           if (!selectedReservation) return;
-          await updateReservation(selectedReservation.id, payload);
+          await updateReservation(selectedReservation.id, form);
           await refreshReservations();
           setIsDrawerOpen(false);
         }}
