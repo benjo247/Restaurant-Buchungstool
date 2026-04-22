@@ -3,48 +3,59 @@ import ReservationCard from "../components/ReservationCard";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
-  let reservations: any[] = [];
-  let error = "";
+type Reservation = {
+  id: string;
+  guest_name: string;
+  guest_phone: string | null;
+  guest_count: number;
+  start_time: string;
+  end_time: string;
+  status: string;
+  notes: string | null;
+  table_name: string | null;
+};
 
-  try {
-    const sql = getSql();
-    reservations = await sql`
-      select
-        r.id,
-        r.guest_name,
-        r.guest_phone,
-        r.guest_count,
-        r.reservation_date::text,
-        r.reservation_time,
-        r.status,
-        r.notes,
-        t.name as table_name
-      from reservations r
-      left join restaurant_tables t on t.id = r.table_id
-      order by r.reservation_date asc, r.reservation_time asc
-      limit 20
-    `;
-  } catch (e: any) {
-    error = e?.message ?? "Unbekannter Fehler";
-  }
+async function getReservations(): Promise<Reservation[]> {
+  const result = await sql`
+    SELECT
+      r.id,
+      r.guest_name,
+      r.guest_phone,
+      r.guest_count,
+      r.start_time,
+      r.end_time,
+      r.status,
+      r.notes,
+      t.name as table_name
+    FROM reservations r
+    LEFT JOIN restaurant_tables t ON r.table_id = t.id
+    ORDER BY r.start_time ASC
+    LIMIT 20
+  `;
+
+  return result as Reservation[];
+}
+
+export default async function HomePage() {
+  const reservations = await getReservations();
 
   return (
-    <>
-      <div className="card">
-        <div className="row">
-          <div>
-            <div className="muted">Heute / nächste Reservierungen</div>
-            <h2>Serviceansicht</h2>
-          </div>
-          <a className="button" href="/new">+ Neue Reservierung</a>
+    <section className="stack">
+      <div className="section-head">
+        <div>
+          <p className="eyebrow">Heute</p>
+          <h2>Serviceübersicht</h2>
         </div>
+        <a className="primary-button" href="/new">
+          + Neue Reservierung
+        </a>
       </div>
 
-      {error ? <div className="notice">Datenbank noch nicht verbunden: {error}</div> : null}
-
       {reservations.length === 0 ? (
-        <div className="empty">Noch keine Reservierungen vorhanden.</div>
+        <div className="empty-state">
+          <h3>Noch keine Reservierungen</h3>
+          <p>Lege in Neon zuerst die Tabellen an und erstelle dann die erste Reservierung.</p>
+        </div>
       ) : (
         <div className="card-list">
           {reservations.map((reservation) => (
@@ -52,6 +63,6 @@ export default async function HomePage() {
           ))}
         </div>
       )}
-    </>
+    </section>
   );
 }
