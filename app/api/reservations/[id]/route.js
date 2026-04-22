@@ -6,28 +6,71 @@ export async function PATCH(request, { params }) {
   const id = params.id;
   const body = await request.json();
 
-  const guestName = body.guestName ?? null;
-  const guestPhone = body.guestPhone !== undefined ? (body.guestPhone || null) : undefined;
-  const guestCount = body.guestCount ?? null;
-  const startTime = body.startTime ?? null;
-  const endTime = body.endTime ?? null;
-  const status = body.status ?? null;
-  const notes = body.notes !== undefined ? (body.notes || null) : undefined;
-  const tableId = body.tableId !== undefined ? (body.tableId || null) : undefined;
-  const staffName = body.staffName !== undefined ? (body.staffName || null) : undefined;
+  const currentRows = await sql`
+    SELECT *
+    FROM reservations
+    WHERE id = ${id}
+    LIMIT 1
+  `;
+
+  const current = currentRows[0];
+
+  if (!current) {
+    return Response.json({ error: 'Reservierung nicht gefunden.' }, { status: 404 });
+  }
+
+  const guestName =
+    body.guestName !== undefined ? String(body.guestName || '').trim() : current.guest_name;
+
+  const guestPhone =
+    body.guestPhone !== undefined
+      ? (body.guestPhone ? String(body.guestPhone).trim() : null)
+      : current.guest_phone;
+
+  const guestCount =
+    body.guestCount !== undefined ? Number(body.guestCount || 0) : current.guest_count;
+
+  const startTime =
+    body.startTime !== undefined ? String(body.startTime || '') : current.start_time;
+
+  const endTime =
+    body.endTime !== undefined ? String(body.endTime || '') : current.end_time;
+
+  const status =
+    body.status !== undefined ? String(body.status || 'booked') : current.status;
+
+  const notes =
+    body.notes !== undefined
+      ? (body.notes ? String(body.notes).trim() : null)
+      : current.notes;
+
+  const tableId =
+    body.tableId !== undefined ? (body.tableId ? String(body.tableId) : null) : current.table_id;
+
+  const staffName =
+    body.staffName !== undefined
+      ? (body.staffName ? String(body.staffName).trim() : null)
+      : current.staff_name;
+
+  if (!guestName || !guestCount || !startTime || !endTime) {
+    return Response.json(
+      { error: 'Name, Personen, Start und Ende sind erforderlich.' },
+      { status: 400 }
+    );
+  }
 
   await sql`
     UPDATE reservations
     SET
-      guest_name = COALESCE(${guestName}, guest_name),
-      guest_phone = CASE WHEN ${body.guestPhone !== undefined} THEN ${guestPhone} ELSE guest_phone END,
-      guest_count = COALESCE(${guestCount}, guest_count),
-      start_time = COALESCE(${startTime}, start_time),
-      end_time = COALESCE(${endTime}, end_time),
-      status = COALESCE(${status}, status),
-      notes = CASE WHEN ${body.notes !== undefined} THEN ${notes} ELSE notes END,
-      table_id = CASE WHEN ${body.tableId !== undefined} THEN ${tableId} ELSE table_id END,
-      staff_name = CASE WHEN ${body.staffName !== undefined} THEN ${staffName} ELSE staff_name END
+      guest_name = ${guestName},
+      guest_phone = ${guestPhone},
+      guest_count = ${guestCount},
+      start_time = ${startTime},
+      end_time = ${endTime},
+      status = ${status},
+      notes = ${notes},
+      table_id = ${tableId},
+      staff_name = ${staffName}
     WHERE id = ${id}
   `;
 
@@ -51,5 +94,5 @@ export async function PATCH(request, { params }) {
     LIMIT 1
   `;
 
-  return Response.json(rows[0] || { ok: true });
+  return Response.json(rows[0]);
 }
