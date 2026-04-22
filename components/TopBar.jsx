@@ -1,10 +1,9 @@
 export default function TopBar() {
   return (
-    <div className="topbar panel-light">
+    <div className="topbar panel">
       <div className="topbar-left">
-        <div className="chip strong-chip">Heute</div>
-        <div className="chip">Dinner Shift</div>
-        <div className="chip">Innenbereich</div>
+        <span className="pill pill-active">Heute</span>
+        <span className="pill">Dinner Shift</span>
       </div>
       <div className="topbar-right">
         <a href="/new" className="primary-button">+ Neue Reservierung</a>

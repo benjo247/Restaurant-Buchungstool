@@ -17,7 +17,7 @@ async function getReservations() {
       r.source,
       r.table_id,
       r.staff_name,
-      t.name as table_name
+      t.name AS table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     ORDER BY r.start_time ASC

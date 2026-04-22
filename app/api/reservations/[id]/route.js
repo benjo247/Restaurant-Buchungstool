@@ -16,10 +16,7 @@ export async function PATCH(request, { params }) {
   const current = existingRows[0];
 
   if (!current) {
-    return Response.json(
-      { error: 'Reservierung nicht gefunden.' },
-      { status: 404 }
-    );
+    return Response.json({ error: 'Reservierung nicht gefunden.' }, { status: 404 });
   }
 
   const guestName =

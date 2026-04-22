@@ -35,13 +35,13 @@ export default function NewPage() {
 
   useEffect(() => {
     fetch('/api/tables', { cache: 'no-store' })
-      .then((r) => r.ok ? r.json() : [])
+      .then((r) => (r.ok ? r.json() : []))
       .then((data) => setTables(Array.isArray(data) ? data : []))
       .catch(() => setTables([]));
   }, []);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
     setMessage('');
 
     const response = await fetch('/api/reservations', {
@@ -51,6 +51,7 @@ export default function NewPage() {
     });
 
     const data = await response.json();
+
     if (!response.ok) {
       setMessage(data.error || 'Speichern fehlgeschlagen.');
       return;
@@ -61,24 +62,23 @@ export default function NewPage() {
 
   return (
     <section className="simple-page">
-      <div className="panel-light form-shell">
+      <div className="page-title">
         <p className="eyebrow">Neu</p>
         <h2>Neue Reservierung</h2>
+      </div>
+
+      <div className="panel form-shell">
         <form className="simple-form" onSubmit={handleSubmit}>
           <input placeholder="Gastname" value={form.guestName} onChange={(e) => setForm({ ...form, guestName: e.target.value })} />
           <input placeholder="Telefon" value={form.guestPhone} onChange={(e) => setForm({ ...form, guestPhone: e.target.value })} />
           <input type="number" placeholder="Personen" value={form.guestCount} onChange={(e) => setForm({ ...form, guestCount: Number(e.target.value) })} />
           <select value={form.staffName} onChange={(e) => setForm({ ...form, staffName: e.target.value })}>
             <option value="">Mitarbeiter wählen</option>
-            {STAFF_OPTIONS.map((name) => (
-              <option value={name} key={name}>{name}</option>
-            ))}
+            {STAFF_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}
           </select>
           <select value={form.tableId} onChange={(e) => setForm({ ...form, tableId: e.target.value })}>
             <option value="">Tisch optional wählen</option>
-            {tables.map((table) => (
-              <option key={table.id} value={table.id}>{table.name} · {table.capacity} Plätze</option>
-            ))}
+            {tables.map((table) => <option key={table.id} value={table.id}>{table.name} · {table.capacity} Plätze</option>)}
           </select>
           <input type="datetime-local" value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
           <input type="datetime-local" value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />

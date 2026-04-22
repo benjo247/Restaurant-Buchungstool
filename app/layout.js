@@ -4,7 +4,7 @@ import HeaderBrand from '../components/HeaderBrand';
 
 export const metadata = {
   title: 'Restaurant Buchungstool',
-  description: 'Floor Control für Restaurants'
+  description: 'Clean Restart für das Restaurant-Buchungstool'
 };
 
 function getDateLabel() {
@@ -25,8 +25,8 @@ export default function RootLayout({ children }) {
             <header className="shell-header">
               <HeaderBrand />
               <div className="header-meta">
-                <div className="date-pill">{getDateLabel()}</div>
-                <div className="date-pill accent">Live Service</div>
+                <span className="pill">{getDateLabel()}</span>
+                <span className="pill pill-active">Live Service</span>
               </div>
             </header>
             <main className="page-content">{children}</main>

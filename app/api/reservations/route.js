@@ -35,11 +35,11 @@ export async function POST(request) {
   const guestCount = Number(body.guestCount || 2);
   const startTime = String(body.startTime || '').trim();
   const endTime = String(body.endTime || '').trim();
+  const status = String(body.status || 'booked');
   const notes = body.notes ? String(body.notes).trim() : null;
   const tableId = body.tableId ? String(body.tableId) : null;
-  const status = String(body.status || 'booked');
-  const source = String(body.source || 'web');
   const staffName = body.staffName ? String(body.staffName).trim() : null;
+  const source = String(body.source || 'web');
 
   if (!guestName || !guestCount || !startTime || !endTime) {
     return Response.json(
@@ -61,8 +61,7 @@ export async function POST(request) {
       source,
       table_id,
       staff_name
-    )
-    VALUES (
+    ) VALUES (
       ${id},
       ${guestName},
       ${guestPhone},

@@ -38,16 +38,11 @@ export default function FloorWorkspace({ initialReservations, tables }) {
     setReservations(data);
 
     if (selectedReservationId) {
-      const updatedSelected = data.find((item) => item.id === selectedReservationId);
-      if (!updatedSelected) {
-        setSelectedReservationId('');
-        setSelectedTableId('');
-      } else {
-        setSelectedTableId(updatedSelected.table_id || '');
+      const updated = data.find((item) => item.id === selectedReservationId);
+      if (updated) {
+        setSelectedTableId(updated.table_id || '');
       }
     }
-
-    return data;
   }
 
   async function updateReservation(id, payload) {
@@ -63,10 +58,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
       throw new Error(data.error || 'Speichern fehlgeschlagen.');
     }
 
-    setReservations((current) =>
-      current.map((item) => (item.id === id ? { ...item, ...data } : item))
-    );
-
+    setReservations((current) => current.map((item) => (item.id === id ? { ...item, ...data } : item)));
     setSelectedReservationId(id);
     setSelectedTableId(data.table_id || '');
 
@@ -75,7 +67,6 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   async function handleStatusChange(status) {
     if (!selectedReservation) return;
-
     await updateReservation(selectedReservation.id, { status });
     await refreshReservations();
   }
@@ -88,12 +79,9 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   function handleSelectTable(tableId) {
     setSelectedTableId(tableId);
-    const linkedReservation = reservations.find((item) => item.table_id === tableId);
-
-    if (linkedReservation) {
-      setSelectedReservationId(linkedReservation.id);
-    } else {
-      setSelectedReservationId('');
+    const linked = reservations.find((item) => item.table_id === tableId);
+    if (linked) {
+      setSelectedReservationId(linked.id);
     }
   }
 
@@ -131,7 +119,6 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
       <BottomDock
         selectedReservation={selectedReservation}
-        selectedTable={selectedTable}
         onOpenEdit={() => {
           if (!selectedReservation) return;
           setIsDrawerOpen(true);

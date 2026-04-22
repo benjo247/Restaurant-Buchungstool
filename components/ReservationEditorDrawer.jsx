@@ -8,8 +8,7 @@ function toLocalInput(value) {
   if (!value) return '';
   const date = new Date(value);
   const offset = date.getTimezoneOffset();
-  const local = new Date(date.getTime() - offset * 60000);
-  return local.toISOString().slice(0, 16);
+  return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
 }
 
 export default function ReservationEditorDrawer({ open, reservation, tables, onClose, onSaved }) {
@@ -24,9 +23,12 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
     status: 'booked',
     staffName: ''
   });
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!reservation) return;
+
     setForm({
       guestName: reservation.guest_name || '',
       guestPhone: reservation.guest_phone || '',
@@ -38,19 +40,20 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
       status: reservation.status || 'booked',
       staffName: reservation.staff_name || ''
     });
+    setError('');
   }, [reservation]);
 
   if (!open || !reservation) return null;
 
   return (
     <div className="drawer-backdrop" onClick={onClose}>
-      <aside className="drawer" onClick={(e) => e.stopPropagation()}>
+      <aside className="drawer" onClick={(event) => event.stopPropagation()}>
         <div className="drawer-head">
           <div>
             <p className="eyebrow">Bearbeiten</p>
             <h3>{reservation.guest_name}</h3>
           </div>
-          <button className="icon-close" onClick={onClose}>✕</button>
+          <button className="icon-button" onClick={onClose}>✕</button>
         </div>
 
         <div className="drawer-form">
@@ -93,8 +96,8 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
             <span>Mitarbeiter</span>
             <select value={form.staffName} onChange={(e) => setForm({ ...form, staffName: e.target.value })}>
               <option value="">Nicht zugewiesen</option>
-              {STAFF_OPTIONS.map((name) => (
-                <option key={name} value={name}>{name}</option>
+              {STAFF_OPTIONS.map((item) => (
+                <option key={item} value={item}>{item}</option>
               ))}
             </select>
           </label>
@@ -104,9 +107,7 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
             <select value={form.tableId} onChange={(e) => setForm({ ...form, tableId: e.target.value })}>
               <option value="">Kein Tisch</option>
               {tables.map((table) => (
-                <option value={table.id} key={table.id}>
-                  {table.name} · {table.capacity} Plätze
-                </option>
+                <option key={table.id} value={table.id}>{table.name} · {table.capacity} Plätze</option>
               ))}
             </select>
           </label>
@@ -117,9 +118,27 @@ export default function ReservationEditorDrawer({ open, reservation, tables, onC
           </label>
         </div>
 
+        {error ? <p className="form-error">{error}</p> : null}
+
         <div className="drawer-actions">
-          <button className="ghost-button" onClick={onClose}>Abbrechen</button>
-          <button className="primary-button" onClick={() => onSaved(form)}>Änderungen speichern</button>
+          <button className="secondary-button" onClick={onClose} disabled={isSaving}>Abbrechen</button>
+          <button
+            className="primary-button"
+            disabled={isSaving}
+            onClick={async () => {
+              try {
+                setIsSaving(true);
+                setError('');
+                await onSaved(form);
+              } catch (err) {
+                setError(err.message || 'Speichern fehlgeschlagen.');
+              } finally {
+                setIsSaving(false);
+              }
+            }}
+          >
+            {isSaving ? 'Speichert …' : 'Änderungen speichern'}
+          </button>
         </div>
       </aside>
     </div>

@@ -26,17 +26,14 @@ export default function LogoUploader() {
   }
 
   return (
-    <div className="logo-uploader panel-light">
+    <div className="panel form-shell">
       <div className="logo-preview">
         {preview ? <img src={preview} alt="Logo Vorschau" className="logo-preview-image" /> : <div className="logo-placeholder">Logo</div>}
       </div>
-
       <label className="primary-button upload-button">
         Logo auswählen
         <input type="file" accept="image/*" onChange={onChange} />
       </label>
-
-      <p className="muted">Nach dem Upload kurz neu laden. Das Logo erscheint dann oben links im Header.</p>
     </div>
   );
 }

@@ -17,9 +17,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <div className="sidebar-brand-mark">R</div>
+        <div className="sidebar-mark">R</div>
         <div>
-          <p className="sidebar-label">Restaurant OS</p>
+          <div className="sidebar-kicker">Restaurant OS</div>
           <h2>Control Center</h2>
         </div>
       </div>
@@ -34,10 +34,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="sidebar-footer">
-        <div className="mode-chip">Midnight Mode</div>
-      </div>
     </aside>
   );
 }

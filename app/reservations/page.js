@@ -12,7 +12,7 @@ async function getReservations() {
       r.start_time,
       r.status,
       r.staff_name,
-      t.name as table_name
+      t.name AS table_name
     FROM reservations r
     LEFT JOIN restaurant_tables t ON r.table_id = t.id
     ORDER BY r.start_time ASC
@@ -24,14 +24,11 @@ export default async function ReservationsPage() {
 
   return (
     <section className="simple-page">
-      <div className="section-title">
+      <div className="page-title">
         <p className="eyebrow">Reservierungen</p>
         <h2>Alle Buchungen</h2>
       </div>
-
-      <div className="panel-light form-shell">
-        <ReservationList reservations={reservations} />
-      </div>
+      <ReservationList reservations={reservations} onSelectReservation={() => {}} onEditReservation={() => {}} />
     </section>
   );
 }

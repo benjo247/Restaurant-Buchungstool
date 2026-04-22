@@ -1,4 +1,4 @@
-import { sql } from '../../../../lib/db';
+import { sql } from '../../../lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,5 +8,6 @@ export async function GET() {
     FROM restaurant_tables
     ORDER BY name ASC
   `;
+
   return Response.json(rows);
 }
