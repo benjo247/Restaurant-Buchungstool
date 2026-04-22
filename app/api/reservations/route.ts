@@ -1,5 +1,5 @@
-import { getSql } from "@/lib/db";
-import { makeId } from "@/lib/id";
+import { sql } from "../../../lib/db";
+import { createId } from "../../../lib/id";
 
 export const dynamic = "force-dynamic";
 
