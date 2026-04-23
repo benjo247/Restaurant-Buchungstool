@@ -8,17 +8,10 @@ function toLocalInput(value) {
   if (!value) return '';
   const date = new Date(value);
   const offset = date.getTimezoneOffset();
-  const local = new Date(date.getTime() - offset * 60000);
-  return local.toISOString().slice(0, 16);
+  return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
 }
 
-export default function ReservationEditorDrawer({
-  open,
-  reservation,
-  tables,
-  onClose,
-  onSaved
-}) {
+export default function ReservationEditorDrawer({ open, reservation, tables, onClose, onSaved }) {
   const [form, setForm] = useState({
     guestName: '',
     guestPhone: '',
@@ -30,7 +23,6 @@ export default function ReservationEditorDrawer({
     status: 'booked',
     staffName: ''
   });
-
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -48,170 +40,106 @@ export default function ReservationEditorDrawer({
       status: reservation.status || 'booked',
       staffName: reservation.staff_name || ''
     });
-
     setError('');
-    setIsSaving(false);
   }, [reservation]);
 
   if (!open || !reservation) return null;
 
-  function updateField(name, value) {
-    setForm((current) => ({ ...current, [name]: value }));
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setError('');
-    setIsSaving(true);
-
-    try {
-      await onSaved(form);
-    } catch (err) {
-      setError(err?.message || 'Speichern fehlgeschlagen.');
-      setIsSaving(false);
-    }
-  }
-
   return (
-    <div className="drawer-backdrop">
-      <aside className="drawer">
+    <div className="drawer-backdrop" onClick={onClose}>
+      <aside className="drawer" onClick={(event) => event.stopPropagation()}>
         <div className="drawer-head">
           <div>
             <p className="eyebrow">Bearbeiten</p>
             <h3>{reservation.guest_name}</h3>
           </div>
-
-          <button
-            type="button"
-            className="icon-close"
-            onClick={onClose}
-            disabled={isSaving}
-            aria-label="Dialog schließen"
-          >
-            ✕
-          </button>
+          <button className="icon-button" onClick={onClose}>✕</button>
         </div>
 
-        <form className="drawer-form-wrap" onSubmit={handleSubmit}>
-          <div className="drawer-form">
-            <label className="field">
-              <span>Gastname</span>
-              <input
-                value={form.guestName}
-                onChange={(e) => updateField('guestName', e.target.value)}
-              />
-            </label>
+        <div className="drawer-form">
+          <label className="field">
+            <span>Gastname</span>
+            <input value={form.guestName} onChange={(e) => setForm({ ...form, guestName: e.target.value })} />
+          </label>
 
-            <label className="field">
-              <span>Telefon</span>
-              <input
-                value={form.guestPhone}
-                onChange={(e) => updateField('guestPhone', e.target.value)}
-              />
-            </label>
+          <label className="field">
+            <span>Telefon</span>
+            <input value={form.guestPhone} onChange={(e) => setForm({ ...form, guestPhone: e.target.value })} />
+          </label>
 
-            <label className="field">
-              <span>Personen</span>
-              <input
-                type="number"
-                min="1"
-                value={form.guestCount}
-                onChange={(e) => updateField('guestCount', Number(e.target.value))}
-              />
-            </label>
+          <label className="field">
+            <span>Personen</span>
+            <input type="number" min="1" value={form.guestCount} onChange={(e) => setForm({ ...form, guestCount: Number(e.target.value) })} />
+          </label>
 
-            <label className="field">
-              <span>Status</span>
-              <select
-                value={form.status}
-                onChange={(e) => updateField('status', e.target.value)}
-              >
-                <option value="booked">Gebucht</option>
-                <option value="seated">Eingetroffen</option>
-                <option value="finished">Fertig</option>
-                <option value="no_show">No-Show</option>
-              </select>
-            </label>
+          <label className="field">
+            <span>Status</span>
+            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
+              <option value="booked">Gebucht</option>
+              <option value="seated">Eingetroffen</option>
+              <option value="finished">Fertig</option>
+              <option value="no_show">No-Show</option>
+            </select>
+          </label>
 
-            <label className="field">
-              <span>Start</span>
-              <input
-                type="datetime-local"
-                value={form.startTime}
-                onChange={(e) => updateField('startTime', e.target.value)}
-              />
-            </label>
+          <label className="field">
+            <span>Start</span>
+            <input type="datetime-local" value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
+          </label>
 
-            <label className="field">
-              <span>Ende</span>
-              <input
-                type="datetime-local"
-                value={form.endTime}
-                onChange={(e) => updateField('endTime', e.target.value)}
-              />
-            </label>
+          <label className="field">
+            <span>Ende</span>
+            <input type="datetime-local" value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />
+          </label>
 
-            <label className="field">
-              <span>Mitarbeiter</span>
-              <select
-                value={form.staffName}
-                onChange={(e) => updateField('staffName', e.target.value)}
-              >
-                <option value="">Nicht zugewiesen</option>
-                {STAFF_OPTIONS.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <label className="field">
+            <span>Mitarbeiter</span>
+            <select value={form.staffName} onChange={(e) => setForm({ ...form, staffName: e.target.value })}>
+              <option value="">Nicht zugewiesen</option>
+              {STAFF_OPTIONS.map((item) => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+            </select>
+          </label>
 
-            <label className="field">
-              <span>Tisch</span>
-              <select
-                value={form.tableId}
-                onChange={(e) => updateField('tableId', e.target.value)}
-              >
-                <option value="">Kein Tisch</option>
-                {tables.map((table) => (
-                  <option key={table.id} value={table.id}>
-                    {table.name} · {table.capacity} Plätze
-                  </option>
-                ))}
-              </select>
-            </label>
+          <label className="field">
+            <span>Tisch</span>
+            <select value={form.tableId} onChange={(e) => setForm({ ...form, tableId: e.target.value })}>
+              <option value="">Kein Tisch</option>
+              {tables.map((table) => (
+                <option key={table.id} value={table.id}>{table.name} · {table.capacity} Plätze</option>
+              ))}
+            </select>
+          </label>
 
-            <label className="field field-full">
-              <span>Notiz</span>
-              <textarea
-                rows="4"
-                value={form.notes}
-                onChange={(e) => updateField('notes', e.target.value)}
-              />
-            </label>
-          </div>
+          <label className="field field-full">
+            <span>Notiz</span>
+            <textarea rows="4" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+          </label>
+        </div>
 
-          {error ? <p className="form-error-inline">{error}</p> : null}
+        {error ? <p className="form-error">{error}</p> : null}
 
-          <div className="drawer-actions">
-            <button
-              type="button"
-              className="ghost-button"
-              onClick={onClose}
-              disabled={isSaving}
-            >
-              Abbrechen
-            </button>
-
-            <button
-              type="submit"
-              className="primary-button"
-              disabled={isSaving}
-            >
-              {isSaving ? 'Speichert …' : 'Änderungen speichern'}
-            </button>
-          </div>
-        </form>
+        <div className="drawer-actions">
+          <button className="secondary-button" onClick={onClose} disabled={isSaving}>Abbrechen</button>
+          <button
+            className="primary-button"
+            disabled={isSaving}
+            onClick={async () => {
+              try {
+                setIsSaving(true);
+                setError('');
+                await onSaved(form);
+              } catch (err) {
+                setError(err.message || 'Speichern fehlgeschlagen.');
+              } finally {
+                setIsSaving(false);
+              }
+            }}
+          >
+            {isSaving ? 'Speichert …' : 'Änderungen speichern'}
+          </button>
+        </div>
       </aside>
     </div>
   );

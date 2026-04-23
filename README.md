@@ -1,12 +1,15 @@
-Forecast Patch
+# Restaurant Buchungstool – Clean Restart
 
-Enthält nur:
-- "frei ab" direkt auf den Tischkarten
-- Gesamtauslastung als Kennzahl oben
-- "bald frei" in 30 Minuten
+Saubere Minimalversion mit funktionalem Kern:
+- Reservierungen laden
+- Reservierung bearbeiten und speichern
+- Status ändern
+- Tisch zuweisen
+- Mitarbeiter zuweisen
+- Floor-Ansicht und Reservierungsliste
 
-Diese 4 Dateien ersetzen:
-- components/FloorPlan.jsx
-- components/MetricTiles.jsx
-- app/floor/page.js
-- app/globals.css
+## Deployment
+1. Inhalt dieses Ordners ins Repo hochladen
+2. `DATABASE_URL` in Vercel gesetzt lassen
+3. In Neon einmal `neon-schema.sql` ausführen oder mindestens die `ALTER TABLE` Zeilen laufen lassen
+4. Neu deployen

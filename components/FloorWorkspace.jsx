@@ -32,7 +32,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'Reservierungen konnten nicht geladen werden.');
+      throw new Error(data.error || 'Aktualisierung fehlgeschlagen.');
     }
 
     setReservations(data);
@@ -43,8 +43,6 @@ export default function FloorWorkspace({ initialReservations, tables }) {
         setSelectedTableId(updated.table_id || '');
       }
     }
-
-    return data;
   }
 
   async function updateReservation(id, payload) {
@@ -60,10 +58,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
       throw new Error(data.error || 'Speichern fehlgeschlagen.');
     }
 
-    setReservations((current) =>
-      current.map((item) => (item.id === id ? { ...item, ...data } : item))
-    );
-
+    setReservations((current) => current.map((item) => (item.id === id ? { ...item, ...data } : item)));
     setSelectedReservationId(id);
     setSelectedTableId(data.table_id || '');
 
@@ -72,7 +67,6 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   async function handleStatusChange(status) {
     if (!selectedReservation) return;
-
     await updateReservation(selectedReservation.id, { status });
     await refreshReservations();
   }
@@ -85,12 +79,9 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   function handleSelectTable(tableId) {
     setSelectedTableId(tableId);
-    const linkedReservation = reservations.find((item) => item.table_id === tableId);
-
-    if (linkedReservation) {
-      setSelectedReservationId(linkedReservation.id);
-    } else {
-      setSelectedReservationId('');
+    const linked = reservations.find((item) => item.table_id === tableId);
+    if (linked) {
+      setSelectedReservationId(linked.id);
     }
   }
 
@@ -128,7 +119,6 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
       <BottomDock
         selectedReservation={selectedReservation}
-        selectedTable={selectedTable}
         onOpenEdit={() => {
           if (!selectedReservation) return;
           setIsDrawerOpen(true);
@@ -140,9 +130,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
         open={isDrawerOpen}
         reservation={selectedReservation}
         tables={tables}
-        onClose={() => {
-          setIsDrawerOpen(false);
-        }}
+        onClose={() => setIsDrawerOpen(false)}
         onSaved={async (form) => {
           if (!selectedReservation) return;
           await updateReservation(selectedReservation.id, form);
