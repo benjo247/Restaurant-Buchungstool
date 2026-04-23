@@ -1,0 +1,330 @@
+:root {
+  --b-surface: rgba(255, 255, 255, 0.98);
+  --b-surface-soft: rgba(248, 250, 252, 0.92);
+  --b-stroke: rgba(255,255,255,0.10);
+  --b-shadow: 0 20px 60px rgba(2, 8, 23, 0.16);
+  --b-text-strong: #f8fafc;
+  --b-text-soft: #c7d2fe;
+  --b-floor-card: #ffffff;
+}
+
+.shell-header-polished {
+  padding: 18px 20px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at right top, rgba(6,182,212,0.18), transparent 24%),
+    linear-gradient(90deg, rgba(7,12,30,0.96), rgba(10,20,46,0.98));
+  border: 1px solid var(--b-stroke);
+  box-shadow: var(--b-shadow);
+}
+
+.header-brand-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.header-brand-copy h1 {
+  margin: 0;
+  color: var(--b-text-strong);
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.header-brand-copy .eyebrow {
+  color: var(--b-text-soft);
+  margin-bottom: 2px;
+}
+
+.header-brand-subline {
+  color: rgba(255,255,255,0.72);
+  font-size: 14px;
+}
+
+.header-logo-shell.brand-frame {
+  width: 74px;
+  height: 74px;
+  padding: 8px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.header-logo.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 0;
+  background: rgba(255,255,255,0.98);
+  border-radius: 16px;
+}
+
+.header-logo-fallback.brand-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  font-size: 26px;
+}
+
+.pill-glass {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.topbar.topbar-polished {
+  padding: 14px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.98);
+  box-shadow: var(--b-shadow);
+}
+
+.topbar-polished .pill {
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid rgba(15,23,42,0.06);
+}
+
+.topbar-polished .pill-active {
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.topbar-context {
+  display: grid;
+  gap: 4px;
+  margin-right: 10px;
+}
+
+.topbar-title {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.topbar-subtitle {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.metric-tile.metric-tile-polished {
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.98);
+  box-shadow: var(--b-shadow);
+}
+
+.metric-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.metric-tile-polished strong {
+  font-size: 46px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.metric-helper {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.metric-subline {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.floor-canvas.floor-canvas-polished {
+  padding: 28px;
+  min-height: 560px;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98)),
+    linear-gradient(180deg, #fbfcff, #f7f9fd);
+  box-shadow: var(--b-shadow);
+}
+
+.floor-canvas-polished::after {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(15,23,42,0.06);
+  pointer-events: none;
+}
+
+.floor-zone.floor-zone-polished {
+  background: rgba(124,58,237,0.10);
+  color: #6d28d9;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.table-node.table-node-polished {
+  width: 146px;
+  min-height: 128px;
+  height: auto;
+  padding: 14px 14px 16px;
+  justify-content: flex-start;
+  border-radius: 28px;
+  background: var(--b-floor-card);
+  box-shadow: 0 18px 34px rgba(15,23,42,0.10);
+  gap: 6px;
+}
+
+.table-node-polished .table-name {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.table-node-polished .table-seats {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.table-node-polished .table-guest {
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.table-status-line {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4338ca;
+  background: rgba(99,102,241,0.08);
+}
+
+.table-status-line.free-now {
+  color: #475569;
+  background: #eef2f7;
+}
+
+.table-node-polished.status-reserved::after {
+  border-color: rgba(139, 92, 246, 0.42);
+  box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.08);
+}
+
+.table-node-polished.status-occupied::after {
+  border-color: rgba(16, 185, 129, 0.42);
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.10);
+}
+
+.table-node-polished.status-dirty::after {
+  border-color: rgba(239, 68, 68, 0.40);
+  box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.08);
+}
+
+.table-node-polished.status-free::after {
+  border-color: rgba(148,163,184,0.34);
+}
+
+.right-rail.right-rail-polished {
+  gap: 20px;
+}
+
+.right-rail-polished .rail-section {
+  padding: 0;
+}
+
+.right-rail-polished .rail-item,
+.right-rail-polished .context-card {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.06);
+}
+
+.right-rail-polished .rail-item {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.right-rail-polished .rail-item strong {
+  color: #0f172a;
+}
+
+.right-rail-polished .rail-item span {
+  color: #6b7280;
+}
+
+.bottom-dock {
+  padding: 16px;
+  border-radius: 22px;
+}
+
+.dock-actions {
+  gap: 12px;
+}
+
+.dock-action,
+.primary-button,
+.secondary-button,
+.row-button {
+  min-height: 48px;
+}
+
+.reservation-list.panel {
+  border-radius: 24px;
+}
+
+.reservation-list-head,
+.reservation-row {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.reservation-actions-cell {
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .header-brand-copy h1 {
+    font-size: 40px;
+  }
+
+  .table-node.table-node-polished {
+    width: 132px;
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 800px) {
+  .shell-header-polished {
+    padding: 16px;
+  }
+
+  .header-brand-copy h1 {
+    font-size: 32px;
+  }
+
+  .floor-canvas.floor-canvas-polished {
+    min-height: 700px;
+    padding: 20px;
+  }
+
+  .table-node.table-node-polished {
+    width: 124px;
+  }
+
+  .topbar-subtitle {
+    font-size: 20px;
+  }
+}

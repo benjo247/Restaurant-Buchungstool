@@ -14,12 +14,18 @@ export default function HeaderBrand() {
 
   return (
     <div className="header-brand">
-      <div className="header-logo-shell">
-        {logo ? <img src={logo} alt="Restaurant Logo" className="header-logo" /> : <div className="header-logo-fallback">R</div>}
+      <div className="header-logo-shell brand-frame">
+        {logo ? (
+          <img src={logo} alt="Restaurant Logo" className="header-logo brand-logo" />
+        ) : (
+          <div className="header-logo-fallback brand-fallback">R</div>
+        )}
       </div>
-      <div>
+
+      <div className="header-brand-copy">
         <p className="eyebrow">Single Restaurant Suite</p>
         <h1>Floor Control</h1>
+        <span className="header-brand-subline">Schnell. Klar. Service-tauglich auf iPad.</span>
       </div>
     </div>
   );

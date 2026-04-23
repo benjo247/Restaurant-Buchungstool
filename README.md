@@ -1,11 +1,17 @@
-Paket A
+Paket B – Visual Polish
 
-Dieses ZIP enthält alle kompletten Dateien für:
-- /reservations funktioniert
-- Bearbeiten / Speichern funktioniert
-- Status ändern funktioniert
-- Tisch und Mitarbeiter im Drawer änderbar
-- Buttons sind mit größeren Touch-Flächen iPad-freundlicher
+Enthalten:
+- bessere Header-Kontraste
+- saubere Logo-Einpassung
+- größere, luftigere Tischkarten
+- ruhigere rechte Rail
+- KPI-Karten mit besserer Lesbarkeit
 
-Nach dem Upload in Neon einmal ausführen:
-ALTER TABLE reservations ADD COLUMN IF NOT EXISTS staff_name TEXT;
+Dateien ersetzen:
+- app/layout.js
+- app/paket-b.css
+- components/HeaderBrand.jsx
+- components/TopBar.jsx
+- components/MetricTiles.jsx
+- components/FloorPlan.jsx
+- components/RightRail.jsx

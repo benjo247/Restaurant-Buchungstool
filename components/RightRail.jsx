@@ -1,12 +1,15 @@
 export default function RightRail({ reservations = [], selectedReservation, selectedTable }) {
   return (
-    <aside className="right-rail panel">
+    <aside className="right-rail right-rail-polished panel">
       <div className="rail-section">
         <p className="eyebrow">Nächste Reservierungen</p>
         <div className="rail-list">
           {reservations.slice(0, 5).map((item) => (
             <div className="rail-item" key={item.id}>
-              <strong>{item.guest_name}</strong>
+              <div>
+                <strong>{item.guest_name}</strong>
+                <span>{item.guest_count} Personen · {item.table_name || 'offen'}</span>
+              </div>
               <span>{new Date(item.start_time).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
           ))}

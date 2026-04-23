@@ -1,10 +1,11 @@
 import './globals.css';
+import './paket-b.css';
 import Sidebar from '../components/Sidebar';
 import HeaderBrand from '../components/HeaderBrand';
 
 export const metadata = {
   title: 'Restaurant Buchungstool',
-  description: 'Clean Restart für das Restaurant-Buchungstool'
+  description: 'Visual Polish Paket B'
 };
 
 function getDateLabel() {
@@ -22,10 +23,10 @@ export default function RootLayout({ children }) {
         <div className="app-layout">
           <Sidebar />
           <div className="main-shell">
-            <header className="shell-header">
+            <header className="shell-header shell-header-polished">
               <HeaderBrand />
               <div className="header-meta">
-                <span className="pill">{getDateLabel()}</span>
+                <span className="pill pill-glass">{getDateLabel()}</span>
                 <span className="pill pill-active">Live Service</span>
               </div>
             </header>
