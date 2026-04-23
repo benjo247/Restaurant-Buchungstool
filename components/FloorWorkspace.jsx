@@ -32,7 +32,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'Aktualisierung fehlgeschlagen.');
+      throw new Error(data.error || 'Reservierungen konnten nicht geladen werden.');
     }
 
     setReservations(data);
@@ -41,8 +41,13 @@ export default function FloorWorkspace({ initialReservations, tables }) {
       const updated = data.find((item) => item.id === selectedReservationId);
       if (updated) {
         setSelectedTableId(updated.table_id || '');
+      } else {
+        setSelectedReservationId('');
+        setSelectedTableId('');
       }
     }
+
+    return data;
   }
 
   async function updateReservation(id, payload) {
@@ -58,7 +63,10 @@ export default function FloorWorkspace({ initialReservations, tables }) {
       throw new Error(data.error || 'Speichern fehlgeschlagen.');
     }
 
-    setReservations((current) => current.map((item) => (item.id === id ? { ...item, ...data } : item)));
+    setReservations((current) =>
+      current.map((item) => (item.id === id ? { ...item, ...data } : item))
+    );
+
     setSelectedReservationId(id);
     setSelectedTableId(data.table_id || '');
 
@@ -67,6 +75,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   async function handleStatusChange(status) {
     if (!selectedReservation) return;
+
     await updateReservation(selectedReservation.id, { status });
     await refreshReservations();
   }
@@ -79,16 +88,20 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
   function handleSelectTable(tableId) {
     setSelectedTableId(tableId);
+
     const linked = reservations.find((item) => item.table_id === tableId);
+
     if (linked) {
       setSelectedReservationId(linked.id);
+    } else {
+      setSelectedReservationId('');
     }
   }
 
   return (
     <section className="floor-page">
       <TopBar />
-      <MetricTiles reservations={reservations} />
+      <MetricTiles reservations={reservations} tables={tables} />
 
       <div className="floor-layout">
         <div className="floor-main">
@@ -119,6 +132,7 @@ export default function FloorWorkspace({ initialReservations, tables }) {
 
       <BottomDock
         selectedReservation={selectedReservation}
+        selectedTable={selectedTable}
         onOpenEdit={() => {
           if (!selectedReservation) return;
           setIsDrawerOpen(true);
