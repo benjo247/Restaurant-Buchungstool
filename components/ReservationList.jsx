@@ -2,10 +2,12 @@ export default function ReservationList({
   reservations = [],
   selectedReservationId = '',
   onSelectReservation,
-  onEditReservation
+  onEditReservation,
+  onSetStatus
 }) {
   const canSelect = typeof onSelectReservation === 'function';
   const canEdit = typeof onEditReservation === 'function';
+  const canSetStatus = typeof onSetStatus === 'function';
 
   return (
     <div className="reservation-list panel">
@@ -15,7 +17,8 @@ export default function ReservationList({
         <span>Personen</span>
         <span>Tisch</span>
         <span>Status</span>
-        <span>{canEdit ? 'Aktion' : 'Mitarbeiter'}</span>
+        <span>Mitarbeiter</span>
+        <span>Aktionen</span>
       </div>
 
       {reservations.length === 0 ? (
@@ -33,11 +36,14 @@ export default function ReservationList({
                 minute: '2-digit'
               })}
             </span>
+
             <span>{item.guest_name}</span>
             <span>{item.guest_count}</span>
             <span>{item.table_name || 'Offen'}</span>
             <span className={`status-pill status-pill-${item.status}`}>{item.status}</span>
-            <span>
+            <span>{item.staff_name || '—'}</span>
+
+            <span className="reservation-actions-cell">
               {canEdit ? (
                 <button
                   className="row-button"
@@ -48,9 +54,41 @@ export default function ReservationList({
                 >
                   Bearbeiten
                 </button>
-              ) : (
-                item.staff_name || '—'
-              )}
+              ) : null}
+
+              {canSetStatus ? (
+                <>
+                  <button
+                    className="row-button row-button-soft"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onSetStatus(item.id, 'seated');
+                    }}
+                  >
+                    Eingetroffen
+                  </button>
+
+                  <button
+                    className="row-button row-button-soft"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onSetStatus(item.id, 'finished');
+                    }}
+                  >
+                    Fertig
+                  </button>
+
+                  <button
+                    className="row-button row-button-soft"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onSetStatus(item.id, 'no_show');
+                    }}
+                  >
+                    No-Show
+                  </button>
+                </>
+              ) : null}
             </span>
           </div>
         ))

@@ -1,12 +1,11 @@
-Forecast Patch
+Paket A
 
-Enthält nur:
-- "frei ab" direkt auf den Tischkarten
-- Gesamtauslastung als Kennzahl oben
-- "bald frei" in 30 Minuten
+Dieses ZIP enthält alle kompletten Dateien für:
+- /reservations funktioniert
+- Bearbeiten / Speichern funktioniert
+- Status ändern funktioniert
+- Tisch und Mitarbeiter im Drawer änderbar
+- Buttons sind mit größeren Touch-Flächen iPad-freundlicher
 
-Diese 4 Dateien ersetzen:
-- components/FloorPlan.jsx
-- components/MetricTiles.jsx
-- app/floor/page.js
-- app/globals.css
+Nach dem Upload in Neon einmal ausführen:
+ALTER TABLE reservations ADD COLUMN IF NOT EXISTS staff_name TEXT;

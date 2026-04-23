@@ -52,6 +52,11 @@ export default function ReservationsWorkspace({ initialReservations, tables }) {
     setSelectedReservationId(id);
   }
 
+  async function handleQuickStatus(id, status) {
+    await updateReservation(id, { status });
+    await refreshReservations();
+  }
+
   return (
     <>
       <div className="panel">
@@ -63,6 +68,7 @@ export default function ReservationsWorkspace({ initialReservations, tables }) {
             handleSelectReservation(id);
             setIsDrawerOpen(true);
           }}
+          onSetStatus={handleQuickStatus}
         />
       </div>
 

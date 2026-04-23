@@ -120,6 +120,10 @@ export default function FloorWorkspace({ initialReservations, tables }) {
               handleSelectReservation(id);
               setIsDrawerOpen(true);
             }}
+            onSetStatus={async (id, status) => {
+              await updateReservation(id, { status });
+              await refreshReservations();
+            }}
           />
         </div>
 
